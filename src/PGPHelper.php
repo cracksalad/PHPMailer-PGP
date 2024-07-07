@@ -20,7 +20,7 @@ trait PGPHelper
      * will likely not exist and/or not be writable. Set this by calling setGPGHome before calling
      * any other encryption/signing methods.
      * @var string
-     * @see PHPMailerPGP::setGPGHome()
+     * @see PGPHelper::setGPGHome()
      */
     protected $gnupgHome = '';
 

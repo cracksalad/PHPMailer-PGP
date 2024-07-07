@@ -664,6 +664,7 @@ class PHPMailerPGP extends PHPMailer
      *  email address, but could be a key fingerprint, key ID, name, etc)
      * @param string $purpose The purpose the key will be used for (either 'sign' or 'encrypt').
      *  Used to ensure that the key being returned will be suitable for the intended purpose.
+     * @psalm-param 'sign'|'encrypt' $purpose
      * @return string The key fingerprint
      * @throws PHPMailerPGPException
      */

@@ -128,6 +128,7 @@ class PGPKeyManager
      * @return string|null the public key given by the key server or null if an error occurred
      *  (e.g. if key was not found)
      * @see PGPKeyManager::importKey()
+     * @codeCoverageIgnore
      */
     public function lookupKeyServer($query, $keyserver = 'keys.openpgp.org', &$errCode = 0)
     {
@@ -220,7 +221,10 @@ class PGPKeyManager
             if ($res) {
                 $this->logger->debug('successfully deleted key "{key}"', ['key' => $key]);
             } else {
-                $this->logger->debug('failed to delete key "{key}"', ['key' => $key]);
+                $this->logger->debug('failed to delete key "{key}": {msg}', [
+                    'key' => $key,
+                    'msg' => json_encode($this->gnupg->geterrorinfo())
+                ]);
             }
         }
     }
@@ -235,6 +239,7 @@ class PGPKeyManager
      *  email address, but could be a key fingerprint, key ID, name, etc)
      * @param string $purpose The purpose the key will be used for (either 'sign' or 'encrypt').
      *  Used to ensure that the key being returned will be suitable for the intended purpose.
+     * @psalm-param 'sign'|'encrypt' $purpose
      * @return string[] The key fingerprints
      * @psalm-return list<string>
      */
