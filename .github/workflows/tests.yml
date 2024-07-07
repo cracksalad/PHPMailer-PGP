@@ -68,3 +68,8 @@ jobs:
           version: '10.5'
           php_version: '8.1'
           php_extensions: gnupg
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
