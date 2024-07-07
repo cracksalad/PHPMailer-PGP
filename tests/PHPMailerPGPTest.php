@@ -6,7 +6,6 @@ namespace PHPMailerPGP\Test;
 use PHPMailer\PHPMailerPGP\PHPMailerPGP;
 use PHPMailer\PHPMailerPGP\PGPHelper;
 use PHPMailer\PHPMailerPGP\PGPKeyManager;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
@@ -16,24 +15,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(PHPMailerPGP::class)]
 #[CoversClass(PGPHelper::class)]
 #[CoversClass(PGPKeyManager::class)]
-class PHPMailerPGPTest extends TestCase
+class PHPMailerPGPTest extends PGPTestCase
 {
-    private static string $gnupgHome;
-    
     private PHPMailerPGP $mailer;
     
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
-        
-        self::$gnupgHome = __DIR__ . '/.gnupg';
-        if (!file_exists(self::$gnupgHome)) {
-            echo 'GnuPG home did not exist'.PHP_EOL;
-            if (!mkdir(self::$gnupgHome)) {
-                echo 'unable to create GnuPG home'.PHP_EOL;
-            }
-        }
-        putenv('GNUPGHOME=' . escapeshellcmd(self::$gnupgHome));
         
         $gnupg = new \gnupg();
         if ($gnupg->import(file_get_contents(__DIR__.'/private.key')) === false) {

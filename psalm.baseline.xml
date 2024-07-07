@@ -32,4 +32,14 @@
       <code><![CDATA[PHPMailerPGP]]></code>
     </PropertyNotSetInConstructor>
   </file>
+  <file src="tests/PGPKeyManagerTest.php">
+    <MissingDependency>
+      <code><![CDATA[PGPTestCase]]></code>
+    </MissingDependency>
+  </file>
+  <file src="tests/PHPMailerPGPTest.php">
+    <MissingDependency>
+      <code><![CDATA[PGPTestCase]]></code>
+    </MissingDependency>
+  </file>
 </files>

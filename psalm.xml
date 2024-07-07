@@ -20,6 +20,7 @@
             <errorLevel type="suppress">
                 <referencedClass name="gnupg" />
                 <referencedClass name="PHPUnit\Framework\TestCase"></referencedClass>
+                <referencedClass name="Psr\Log\LoggerInterface"></referencedClass>
             </errorLevel>
         </UndefinedClass>
         <UndefinedDocblockClass errorLevel="suppress" />
