@@ -67,9 +67,13 @@ jobs:
         with:
           version: '10.5'
           php_version: '8.1'
-          php_extensions: gnupg
+          php_extensions: gnupg xdebug
+          coverage_clover: ./coverage.xml
+        env:
+          XDEBUG_MODE: coverage
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
