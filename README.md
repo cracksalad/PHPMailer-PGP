@@ -1,9 +1,9 @@
 # PHPMailerPGP - A full-featured email creation and transfer class for PHP with support for PGP/GPG email signing and encryption.
 
-[![Latest Stable Version](http://poser.pugx.org/cracksalad/phpmailer-pgp/v)](https://packagist.org/packages/cracksalad/phpmailer-pgp)
-[![Total Downloads](http://poser.pugx.org/cracksalad/phpmailer-pgp/downloads)](https://packagist.org/packages/cracksalad/phpmailer-pgp)
-[![License](http://poser.pugx.org/cracksalad/phpmailer-pgp/license)](https://packagist.org/packages/cracksalad/phpmailer-pgp)
-[![PHP Version Require](http://poser.pugx.org/cracksalad/phpmailer-pgp/require/php)](https://packagist.org/packages/cracksalad/phpmailer-pgp)
+[![Latest Stable Version](https://poser.pugx.org/cracksalad/phpmailer-pgp/v)](https://packagist.org/packages/cracksalad/phpmailer-pgp)
+[![Total Downloads](https://poser.pugx.org/cracksalad/phpmailer-pgp/downloads)](https://packagist.org/packages/cracksalad/phpmailer-pgp)
+[![License](https://poser.pugx.org/cracksalad/phpmailer-pgp/license)](https://packagist.org/packages/cracksalad/phpmailer-pgp)
+[![PHP Version Require](https://poser.pugx.org/cracksalad/phpmailer-pgp/require/php)](https://packagist.org/packages/cracksalad/phpmailer-pgp)
 [![Psalm Type Coverage](https://shepherd.dev/github/cracksalad/PHPMailerPGP/coverage.svg)](https://packagist.org/packages/cracksalad/phpmailer-pgp)
 [![codecov](https://codecov.io/gh/cracksalad/PHPMailer-PGP/graph/badge.svg?token=FTVJ28D0FT)](https://codecov.io/gh/cracksalad/PHPMailer-PGP)
 
