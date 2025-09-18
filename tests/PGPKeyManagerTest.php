@@ -6,6 +6,7 @@ namespace PHPMailerPGP\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPMailer\PHPMailerPGP\PGPKeyManager;
 use PHPMailer\PHPMailerPGP\PGPHelper;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * @author Andreas Wahlen
@@ -13,7 +14,8 @@ use PHPMailer\PHPMailerPGP\PGPHelper;
  */
 #[CoversClass(PGPHelper::class)]
 #[CoversClass(PGPKeyManager::class)]
-class PGPKeyManagerTest extends PGPTestCase
+#[RequiresPhpExtension('gnupg')]
+final class PGPKeyManagerTest extends PGPTestCase
 {
     private PGPKeyManager $keyManager;
     

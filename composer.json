@@ -1,6 +1,6 @@
 {
     "name": "cracksalad/phpmailer-pgp",
-    "version": "2.0",
+    "version": "2.0.1",
     "type": "library",
     "description": "PHPMailerPGP enables PHPMailer to send OpenPGP/GPG encrypted and signed e-mails",
     "keywords": [
@@ -28,7 +28,7 @@
         "phpmailer/phpmailer": "^6.0"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.7.2",
+        "squizlabs/php_codesniffer": "^3.7.2 || ^4.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "phpcompatibility/php-compatibility": "^9.3.5",
         "psr/log": "^1.0 || ^2.0 || ^3.0"

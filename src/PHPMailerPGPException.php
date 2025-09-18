@@ -5,6 +5,7 @@ namespace PHPMailer\PHPMailerPGP;
 /**
  * @author  Andreas Wahlen
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ * @api
  */
 class PHPMailerPGPException extends \RuntimeException
 {

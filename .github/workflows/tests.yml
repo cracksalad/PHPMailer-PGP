@@ -8,12 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.4'
           coverage: none
           tools: cs2pr
 
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Psalm
         uses: docker://vimeo/psalm-github-actions
@@ -50,7 +50,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         
       # Install dependencies and handle caching in one go.
       - name: Install Composer dependencies
@@ -63,17 +63,17 @@ jobs:
         run: gpg --import tests/private.key
 
       - name: Unit tests
-        uses: php-actions/phpunit@v3
+        uses: php-actions/phpunit@v4
         with:
-          version: '10.5'
-          php_version: '8.1'
+          version: '11.5'
+          php_version: '8.4'
           php_extensions: gnupg xdebug
           coverage_clover: ./coverage.xml
         env:
           XDEBUG_MODE: coverage
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
