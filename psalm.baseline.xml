@@ -23,6 +23,8 @@
       <code><![CDATA[deletekey]]></code>
       <code><![CDATA[import]]></code>
       <code><![CDATA[keyinfo]]></code>
+      <code><![CDATA[keyinfo]]></code>
+      <code><![CDATA[geterrorinfo]]></code>
     </PossiblyNullReference>
     <PossiblyUndefinedArrayOffset>
       <code><![CDATA[$parts[1]]]></code>
@@ -46,8 +48,15 @@
   </file>
   <file src="src/PHPMailerPGP.php">
     <PossiblyNullReference>
+      <code><![CDATA[addencryptkey]]></code>
+      <code><![CDATA[addsignkey]]></code>
       <code><![CDATA[clearencryptkeys]]></code>
       <code><![CDATA[clearsignkeys]]></code>
+      <code><![CDATA[encrypt]]></code>
+      <code><![CDATA[setarmor]]></code>
+      <code><![CDATA[setarmor]]></code>
+      <code><![CDATA[setsignmode]]></code>
+      <code><![CDATA[sign]]></code>
     </PossiblyNullReference>
     <PropertyNotSetInConstructor>
       <code><![CDATA[PHPMailerPGP]]></code>
