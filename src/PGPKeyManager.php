@@ -6,6 +6,37 @@ namespace PHPMailer\PHPMailerPGP;
  * @author  Travis Richardson (@ravisorg)
  * @author Andreas Wahlen
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ *
+ * @api
+ * @psalm-type KeyInfo = array{
+ *    disabled: boolean,
+ *    expired: boolean,
+ *    revoked: boolean,
+ *    is_secret: boolean,
+ *    can_sign: boolean,
+ *    can_encrypt: boolean,
+ *    uids: list<array{
+ *      name: string,
+ *      comment: string,
+ *      email: string,
+ *      uid: string,
+ *      revoked: bool,
+ *      invalid: bool
+ *    }>,
+ *    subkeys: list<array{
+ *      fingerprint: string,
+ *      keyid: string,
+ *      timestamp: int,
+ *      expires: int,
+ *      is_secret: bool,
+ *      invalid: bool,
+ *      can_encrypt: bool,
+ *      can_sign: bool,
+ *      disabled: bool,
+ *      expired: bool,
+ *      revoked: bool
+ *    }>
+ *  }
  */
 class PGPKeyManager
 {
@@ -54,6 +85,8 @@ class PGPKeyManager
      * Imports one or more keys into the local user's keychain. These can be secret or public keys,
      * generally anything exported by (eg) gpg --export. The results of the import are written to
      * the logger's debug log.
+     * If all keys to import are invalid, they will be removed immediately and a message is written
+     * to the logger's warning log.
      * @param string $data One or more GPG/PGP keys
      * @throws PHPMailerPGPException
      * @return void
@@ -93,6 +126,28 @@ class PGPKeyManager
                 '{newsignatures} new signatures imported' .
                 '{skippedkeys} skipped keys',
                 $results
+            );
+        }
+
+        /**
+         * @psalm-var list<KeyInfo> $keyInfo
+         */
+        $keys = $this->gnupg->keyinfo($results['fingerprint']);
+        foreach ($keys as $key) {
+            if ($key['disabled'] || $key['expired'] || $key['revoked']) {
+                continue;
+            }
+            foreach ($key['subkeys'] as $subkey) {
+                if ($subkey['disabled'] || $subkey['expired'] || $subkey['revoked'] || $subkey['invalid']) {
+                    continue;
+                }
+                return;     // at least one valid key imported
+            }
+        }
+        $this->deleteKey($results['fingerprint'], true);
+        if ($this->logger !== null) {
+            $this->logger->warning(
+                'key to import is disabled, expired or revoked, key has not been imported'
             );
         }
     }
@@ -247,35 +302,7 @@ class PGPKeyManager
     {
         $this->initGNUPG();
         /**
-         * @psalm-var list<array{
-         *    disabled: boolean,
-         *    expired: boolean,
-         *    revoked: boolean,
-         *    is_secret: boolean,
-         *    can_sign: boolean,
-         *    can_encrypt: boolean,
-         *    uids: list<array{
-         *      name: string,
-         *      comment: string,
-         *      email: string,
-         *      uid: string,
-         *      revoked: bool,
-         *      invalid: bool
-         *    }>,
-         *    subkeys: list<array{
-         *      fingerprint: string,
-         *      keyid: string,
-         *      timestamp: int,
-         *      expires: int,
-         *      is_secret: bool,
-         *      invalid: bool,
-         *      can_encrypt: bool,
-         *      can_sign: bool,
-         *      disabled: bool,
-         *      expired: bool,
-         *      revoked: bool
-         *    }>
-         *  }> $keys
+         * @psalm-var list<KeyInfo> $keys
          */
         $keys = $this->gnupg->keyinfo($identifier);
         $fingerprints = [];
