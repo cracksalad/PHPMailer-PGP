@@ -3,10 +3,9 @@
 namespace PHPMailer\PHPMailerPGP;
 
 /**
- * @author  Travis Richardson (@ravisorg)
+ * @author Travis Richardson (@ravisorg)
  * @author Andreas Wahlen
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- * @api
  */
 trait PGPHelper
 {
@@ -45,7 +44,7 @@ trait PGPHelper
         }
         if ($this->gnupgHome === '') {
             throw new PHPMailerPGPException('Unable to detect GnuPG home path, please call ' .
-                    __CLASS__ . '::setGPGHome()');
+                    self::class . '::setGPGHome()');
         }
         if (!file_exists($this->gnupgHome)) {
             throw new PHPMailerPGPException('GnuPG home path "' . $this->gnupgHome . '" does not exist');

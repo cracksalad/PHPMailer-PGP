@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace PHPMailerPGP\Test;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPMailer\PHPMailerPGP\PGPKeyManager;
 use PHPMailer\PHPMailerPGP\PGPHelper;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
@@ -12,12 +13,15 @@ use PHPUnit\Framework\Attributes\RequiresPhpExtension;
  * @author Andreas Wahlen
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
-#[CoversClass(PGPHelper::class)]
+#[CoversTrait(PGPHelper::class)]
 #[CoversClass(PGPKeyManager::class)]
 #[RequiresPhpExtension('gnupg')]
 final class PGPKeyManagerTest extends PGPTestCase
 {
-    private PGPKeyManager $keyManager;
+    /**
+     * @var PGPKeyManager
+     */
+    private $keyManager;
     
     public static function setUpBeforeClass(): void
     {

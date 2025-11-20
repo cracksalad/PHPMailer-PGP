@@ -1,8 +1,7 @@
 {
     "name": "cracksalad/phpmailer-pgp",
-    "version": "3.0.0",
-    "type": "library",
     "description": "PHPMailerPGP enables PHPMailer to send OpenPGP/GPG encrypted and signed e-mails",
+    "type": "library",
     "keywords": [
         "mailer",
         "open-pgp",
@@ -28,10 +27,12 @@
         "phpmailer/phpmailer": "^6.0 || ^7.0"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.7.2 || ^4.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "phpcompatibility/php-compatibility": "^9.3.5",
-        "psr/log": "^1.0 || ^2.0 || ^3.0"
+        "psr/log": "^1.0 || ^2.0 || ^3.0",
+        "rector/rector": "^1.2 || ^2.0",
+        "squizlabs/php_codesniffer": "^3.7.2 || ^4.0",
+        "yoast/phpunit-polyfills": "^4.0"
     },
     "suggest": {
         "ext-gnupg": "is technically required, but not compatible with Windows",
@@ -51,10 +52,12 @@
         "check": "./vendor/bin/phpcs",
         "analyze": "./tools/psalm --no-diff --show-info=true",
         "unit-test": "./tools/phpunit",
+        "rector": "./vendor/bin/rector process --dry-run",
         "test": [
             "@check",
             "@analyze",
-            "@unit-test"
+            "@unit-test",
+            "@rector"
         ],
         "test-win": [
             "@check",
@@ -65,6 +68,7 @@
         "check": "Runs PHP Code Sniffer",
         "analyze": "Runs Psalm",
         "unit-test": "Runs PHPUnit",
+        "rector": "Runs Rector",
         "test": "Runs PHP Code Sniffer, Psalm and PHPUnit",
         "test-win": "Runs PHP Code Sniffer and Psalm (PHPUnit needs GnuPG extension, which is not compatible with Windows)"
     }

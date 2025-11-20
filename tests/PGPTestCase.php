@@ -11,7 +11,10 @@ use PHPUnit\Framework\TestCase;
  */
 class PGPTestCase extends TestCase
 {
-    protected static string $gnupgHome;
+    /**
+     * @var string
+     */
+    protected static $gnupgHome;
     
     public static function setUpBeforeClass(): void
     {

@@ -7,6 +7,7 @@ use PHPMailer\PHPMailerPGP\PHPMailerPGP;
 use PHPMailer\PHPMailerPGP\PGPHelper;
 use PHPMailer\PHPMailerPGP\PGPKeyManager;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
@@ -14,12 +15,15 @@ use PHPUnit\Framework\Attributes\RequiresPhpExtension;
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 #[CoversClass(PHPMailerPGP::class)]
-#[CoversClass(PGPHelper::class)]
+#[CoversTrait(PGPHelper::class)]
 #[CoversClass(PGPKeyManager::class)]
 #[RequiresPhpExtension('gnupg')]
 final class PHPMailerPGPTest extends PGPTestCase
 {
-    private PHPMailerPGP $mailer;
+    /**
+     * @var PHPMailerPGP
+     */
+    private $mailer;
     
     public static function setUpBeforeClass(): void
     {
@@ -60,10 +64,14 @@ final class PHPMailerPGPTest extends PGPTestCase
         $this->assertTrue($this->mailer->preSend());
 
         $prop = new \ReflectionProperty($this->mailer, 'MIMEHeader');
-        $prop->setAccessible(true);
+        if(version_compare(PHP_VERSION, '8.1.0', '<')) {
+            $prop->setAccessible(true);             // deprecated since PHP 8.5, necessary for PHP <8.1
+        }
         $body = $prop->getValue($this->mailer);
         $prop = new \ReflectionProperty($this->mailer, 'MIMEBody');
-        $prop->setAccessible(true);
+        if(version_compare(PHP_VERSION, '8.1.0', '<')) {
+            $prop->setAccessible(true);             // deprecated since PHP 8.5, necessary for PHP <8.1
+        }
         $body .= $prop->getValue($this->mailer);
         return $body;
     }
