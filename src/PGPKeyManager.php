@@ -102,6 +102,7 @@ class PGPKeyManager
         }
 
         /**
+         * @var array|false $results
          * @psalm-var array{
          *      imported: int,
          *      unchanged: int,
@@ -112,21 +113,28 @@ class PGPKeyManager
          *      newsignatures: int,
          *      skippedkeys: int,
          *      fingerprint: string
-         *  } $results
+         *  }|false $results
          */
         $results = $this->gnupg->import($data);
         if ($this->logger !== null) {
-            $this->logger->debug(
-                '{imported} keys imported, ' .
-                '{unchanged} keys unchanged' .
-                '{newuserids} new user ids imported' .
-                '{newsubkeys} new subkeys imported' .
-                '{secretimported} secret keys imported' .
-                '{secretunchanged} secret keys unchanged' .
-                '{newsignatures} new signatures imported' .
-                '{skippedkeys} skipped keys',
-                $results
-            );
+            if ($results === false) {
+                $this->logger->error('failed to import key: {msg} {key}', [
+                    'key' => $data,
+                    'msg' => json_encode($this->gnupg->geterrorinfo())
+                ]);
+            } else {
+                $this->logger->debug(
+                    '{imported} keys imported, ' .
+                    '{unchanged} keys unchanged' .
+                    '{newuserids} new user ids imported' .
+                    '{newsubkeys} new subkeys imported' .
+                    '{secretimported} secret keys imported' .
+                    '{secretunchanged} secret keys unchanged' .
+                    '{newsignatures} new signatures imported' .
+                    '{skippedkeys} skipped keys',
+                    $results
+                );
+            }
         }
 
         /**
@@ -276,7 +284,7 @@ class PGPKeyManager
             if ($res) {
                 $this->logger->debug('successfully deleted key "{key}"', ['key' => $key]);
             } else {
-                $this->logger->debug('failed to delete key "{key}": {msg}', [
+                $this->logger->error('failed to delete key "{key}": {msg}', [
                     'key' => $key,
                     'msg' => json_encode($this->gnupg->geterrorinfo())
                 ]);

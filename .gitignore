@@ -6,6 +6,5 @@
 /.phpunit.result.cache
 /.project
 /build
-/composer.lock
 /tools
 /vendor
