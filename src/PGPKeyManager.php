@@ -88,8 +88,8 @@ class PGPKeyManager
      * If all keys to import are invalid, they will be removed immediately and a message is written
      * to the logger's warning log.
      * @param string $data One or more GPG/PGP keys
-     * @throws PHPMailerPGPException
-     * @return void
+     * @throws PHPMailerPGPException if the GnuPG home directory is not writable
+     * @return bool true on success
      * @see PGPKeyManager::importKeyFile()
      * @see PGPKeyManager::deleteKey()
      */
@@ -125,39 +125,42 @@ class PGPKeyManager
             } else {
                 $this->logger->debug(
                     '{imported} keys imported, ' .
-                    '{unchanged} keys unchanged' .
-                    '{newuserids} new user ids imported' .
-                    '{newsubkeys} new subkeys imported' .
-                    '{secretimported} secret keys imported' .
-                    '{secretunchanged} secret keys unchanged' .
-                    '{newsignatures} new signatures imported' .
+                    '{unchanged} keys unchanged, ' .
+                    '{newuserids} new user ids imported, ' .
+                    '{newsubkeys} new subkeys imported, ' .
+                    '{secretimported} secret keys imported, ' .
+                    '{secretunchanged} secret keys unchanged, ' .
+                    '{newsignatures} new signatures imported, ' .
                     '{skippedkeys} skipped keys',
                     $results
                 );
             }
         }
 
-        /**
-         * @psalm-var list<KeyInfo> $keyInfo
-         */
-        $keys = $this->gnupg->keyinfo($results['fingerprint']);
-        foreach ($keys as $key) {
-            if ($key['disabled'] || $key['expired'] || $key['revoked']) {
-                continue;
-            }
-            foreach ($key['subkeys'] as $subkey) {
-                if ($subkey['disabled'] || $subkey['expired'] || $subkey['revoked'] || $subkey['invalid']) {
+        if ($results !== false) {
+            /**
+             * @psalm-var list<KeyInfo> $keys
+             */
+            $keys = $this->gnupg->keyinfo($results['fingerprint']);
+            foreach ($keys as $key) {
+                if ($key['disabled'] || $key['expired'] || $key['revoked']) {
                     continue;
                 }
-                return;     // at least one valid key imported
+                foreach ($key['subkeys'] as $subkey) {
+                    if ($subkey['disabled'] || $subkey['expired'] || $subkey['revoked'] || $subkey['invalid']) {
+                        continue;
+                    }
+                    return true;     // at least one valid key imported
+                }
+            }
+            $this->deleteKey($results['fingerprint'], true);
+            if ($this->logger !== null) {
+                $this->logger->warning(
+                    'key to import is disabled, expired or revoked, key has not been imported'
+                );
             }
         }
-        $this->deleteKey($results['fingerprint'], true);
-        if ($this->logger !== null) {
-            $this->logger->warning(
-                'key to import is disabled, expired or revoked, key has not been imported'
-            );
-        }
+        return false;
     }
 
     /**
@@ -165,8 +168,8 @@ class PGPKeyManager
      * public keys, generally anything exported by (eg) gpg --export. The results of the import are
      * written to PHPMailer's debug log.
      * @param string $path Path to GPG/PGP keys
-     * @throws PHPMailerPGPException
-     * @return void
+     * @throws PHPMailerPGPException if the given path does not exist or is not readable
+     * @return bool true on success
      * @see PGPKeyManager::importKey()
      * @see PGPKeyManager::deleteKey()
      */
@@ -179,7 +182,7 @@ class PGPKeyManager
         if ($key === false) {
             throw new PHPMailerPGPException('Could not read key file');
         }
-        $this->importKey($key);
+        return $this->importKey($key);
     }
 
     /**
@@ -266,7 +269,8 @@ class PGPKeyManager
      * Delete a previously imported key.
      * @param string $key the e-mail address, hexadecimal key ID or a hexadecimal key fingerprint
      * @param bool $deletePrivateKey wether to delete corresponding private keys as well
-     * @return void
+     * @throws PHPMailerPGPException if the GnuPG home directory is not writable
+     * @return bool true on success
      * @see PGPKeyManager::importKey()
      */
     public function deleteKey($key, $deletePrivateKey)
@@ -277,7 +281,7 @@ class PGPKeyManager
         }
 
         /**
-         * @var boolean $res
+         * @var bool $res
          */
         $res = $this->gnupg->deletekey($key, $deletePrivateKey);
         if ($this->logger !== null) {
@@ -290,6 +294,7 @@ class PGPKeyManager
                 ]);
             }
         }
+        return $res;
     }
 
     /**

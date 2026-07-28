@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPMailer\PHPMailerPGP\PGPKeyManager;
 use PHPMailer\PHPMailerPGP\PGPHelper;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Assert;
 
 /**
  * @author Andreas Wahlen
@@ -30,7 +31,7 @@ final class PGPKeyManagerTest extends PGPTestCase
         $gnupg = new \gnupg();
         $gnupg->seterrormode(GNUPG_ERROR_EXCEPTION);
         if ($gnupg->import(file_get_contents(__DIR__.'/public.asc')) === false) {
-            echo 'failed to import example key'.PHP_EOL;
+            Assert::fail('failed to import example key');
         }
     }
     
@@ -110,11 +111,11 @@ final class PGPKeyManagerTest extends PGPTestCase
     
     public function testDeleteAndImport(): void
     {
-        $this->keyManager->deleteKey('user@example.com', true);
+        $this->assertTrue($this->keyManager->deleteKey('user@example.com', true), 'failed to delete GPG key');
         $this->assertEmpty($this->keyManager->getKeys('user@example.com', 'sign'), 'private key still there');
         $this->assertEmpty($this->keyManager->getKeys('user@example.com', 'encrypt'), 'public key still there');
         
-        $this->keyManager->importKeyFile(__DIR__.'/public.asc');
+        $this->assertTrue($this->keyManager->importKeyFile(__DIR__.'/public.asc'), 'failed to import GPG key');
         $this->assertCount(1, $this->keyManager->getKeys('user@example.com', 'sign'), 'private key not found');
         $this->assertCount(1, $this->keyManager->getKeys('user@example.com', 'encrypt'), 'public key not found');
     }

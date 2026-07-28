@@ -10,9 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v3.0.1](https://github.com/cracksalad/PHPMailer-PGP/compare/v3.0.0...v3.0.1) - 2025-07-28
 
+### Changed
+
+- Integrate Rector checks
+- `PGPKeyManager::importKey()`, `PGPKeyManager::importKeyFile()` and `PGPKeyManager::deleteKey()` return bool values instead of being void
+
 ### Fixed
 
 - Handling of `false` as a return value of `gnupg::import()`
+- Compatibility to PHP <7.4 as well as >=8.5 versions
 
 
 ## [v3.0.0](https://github.com/cracksalad/PHPMailer-PGP/compare/v2.0.1...v3.0.0) - 2025-10-16

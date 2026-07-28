@@ -5,7 +5,8 @@
 		    autoloader="vendor/autoload.php"
 		    errorLevel="2"
 		    findUnusedBaselineEntry="true"
-		    findUnusedCode="false" 
+		    findUnusedIssueHandlerSuppression="false"
+		    findUnusedCode="false"
 		    errorBaseline="psalm.baseline.xml">
 
     <projectFiles>

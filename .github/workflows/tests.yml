@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -19,7 +19,7 @@ jobs:
 
       # Install dependencies and handle caching in one go.
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Psalm
         uses: docker://vimeo/psalm-github-actions
@@ -48,13 +48,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # there is no php:5.5-cli-alpine Docker image, which php-actions/phpunit requires
+        # there might not be a Docker image available for the latest PHP version (e.g. php:5.5-cli-alpine), which php-actions/phpunit requires
         # test code not compatible with PHP <7.2
-        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
+        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
         phpunit_args: [""]
         coverage: [false]
         include:
-          - php: "8.4"
+          - php: "8.5"
             phpunit_args: --display-deprecations --display-phpunit-deprecations
             coverage: true
               
@@ -63,16 +63,20 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       
-      - uses: "shivammathur/setup-php@v2"
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: "${{ matrix.php }}"
           coverage: ${{ matrix.coverage == true && 'xdebug' || 'none' }}
           extensions: gnupg
+
+      - name: Remove composer.lock to work around restrictions caused by different PHP versions
+        run: rm composer.lock
+
       # Install dependencies and handle caching in one go.
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           # Bust the cache at least once a month - output format: YYYY-MM.
           custom-cache-suffix: $(date -u "+%Y-%m")
@@ -100,9 +104,9 @@ jobs:
     name: Rector
     
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Cache Composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}

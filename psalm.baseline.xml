@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="6.13.1@1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51">
+<files psalm-version="6.16.1@f1f5de594dc76faf8784e02d3dc4716c91c6f6ac">
   <file src="src/PGPHelper.php">
     <PossiblyFalseOperand>
       <code><![CDATA[getenv('HOME')]]></code>
@@ -8,42 +8,48 @@
   <file src="src/PGPKeyManager.php">
     <InvalidArgument>
       <code><![CDATA['failed to delete key "{key}": {msg}']]></code>
+      <code><![CDATA['failed to import key: {msg} {key}']]></code>
       <code><![CDATA['key to import is disabled, expired or revoked, key has not been imported']]></code>
       <code><![CDATA['successfully deleted key "{key}"']]></code>
       <code><![CDATA['{imported} keys imported, ' .
-                '{unchanged} keys unchanged' .
-                '{newuserids} new user ids imported' .
-                '{newsubkeys} new subkeys imported' .
-                '{secretimported} secret keys imported' .
-                '{secretunchanged} secret keys unchanged' .
-                '{newsignatures} new signatures imported' .
-                '{skippedkeys} skipped keys']]></code>
+                    '{unchanged} keys unchanged, ' .
+                    '{newuserids} new user ids imported, ' .
+                    '{newsubkeys} new subkeys imported, ' .
+                    '{secretimported} secret keys imported, ' .
+                    '{secretunchanged} secret keys unchanged, ' .
+                    '{newsignatures} new signatures imported, ' .
+                    '{skippedkeys} skipped keys']]></code>
     </InvalidArgument>
     <PossiblyNullReference>
       <code><![CDATA[deletekey]]></code>
+      <code><![CDATA[geterrorinfo]]></code>
+      <code><![CDATA[geterrorinfo]]></code>
       <code><![CDATA[import]]></code>
       <code><![CDATA[keyinfo]]></code>
       <code><![CDATA[keyinfo]]></code>
-      <code><![CDATA[geterrorinfo]]></code>
     </PossiblyNullReference>
     <PossiblyUndefinedArrayOffset>
       <code><![CDATA[$parts[1]]]></code>
     </PossiblyUndefinedArrayOffset>
     <ReservedWord>
       <code><![CDATA[$this->logger->debug(
-                '{imported} keys imported, ' .
-                '{unchanged} keys unchanged' .
-                '{newuserids} new user ids imported' .
-                '{newsubkeys} new subkeys imported' .
-                '{secretimported} secret keys imported' .
-                '{secretunchanged} secret keys unchanged' .
-                '{newsignatures} new signatures imported' .
-                '{skippedkeys} skipped keys',
-                $results
-            )]]></code>
+                    '{imported} keys imported, ' .
+                    '{unchanged} keys unchanged, ' .
+                    '{newuserids} new user ids imported, ' .
+                    '{newsubkeys} new subkeys imported, ' .
+                    '{secretimported} secret keys imported, ' .
+                    '{secretunchanged} secret keys unchanged, ' .
+                    '{newsignatures} new signatures imported, ' .
+                    '{skippedkeys} skipped keys',
+                    $results
+                )]]></code>
+      <code><![CDATA[$this->logger->error('failed to import key: {msg} {key}', [
+                    'key' => $data,
+                    'msg' => json_encode($this->gnupg->geterrorinfo())
+                ])]]></code>
       <code><![CDATA[$this->logger->warning(
-                'key to import is disabled, expired or revoked, key has not been imported'
-            )]]></code>
+                    'key to import is disabled, expired or revoked, key has not been imported'
+                )]]></code>
     </ReservedWord>
   </file>
   <file src="src/PHPMailerPGP.php">

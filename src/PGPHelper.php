@@ -57,7 +57,7 @@ trait PGPHelper
              */
             $this->gnupg = new \gnupg();
         }
-        $this->gnupg->seterrormode(\gnupg::ERROR_EXCEPTION);
+        $this->gnupg->seterrormode(\gnupg::ERROR_SILENT);
     }
 
     /**
